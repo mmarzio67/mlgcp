@@ -22,7 +22,20 @@ type DayLevel struct {
 	Depresso         int64
 	Cinque_tibetani  bool
 	Meditazione      bool
-	Created_on       time.Time
+	CreatedOn        time.Time
+}
+
+type User struct {
+	UserName string
+	Password []byte
+	First    string
+	Last     string
+	Role     string
+}
+
+type Session struct {
+	Un           string
+	LastActivity time.Time
 }
 
 func AllDL() ([]DayLevel, error) {
@@ -40,7 +53,7 @@ func AllDL() ([]DayLevel, error) {
 			&dl.Focus,
 			&dl.Arrabiato,
 			&dl.Depresso,
-			&dl.Created_on) // order matters
+			&dl.CreatedOn)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +85,7 @@ func OneDL(r *http.Request) (DayLevel, error) {
 		&dl.Focus,
 		&dl.Arrabiato,
 		&dl.Depresso,
-		&dl.Created_on)
+		&dl.CreatedOn)
 	if err != nil {
 		return dl, err
 	}
@@ -163,7 +176,7 @@ func PutDL(r *http.Request) (DayLevel, error) {
 		fmt.Println(err)
 	}
 
-	dl.Created_on = time.Now()
+	dl.CreatedOn = time.Now()
 
 	/*
 		// validate form values
@@ -194,7 +207,7 @@ func PutDL(r *http.Request) (DayLevel, error) {
 			meditazione, created_on) 
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`
 
-	_, err = config.DB.Exec(queryDL, dl.Focus, dl.Fischio_orecchie, dl.Power_energy, dl.Dormito, dl.PR, dl.Ansia, dl.Arrabiato, dl.Irritato, dl.Depresso, dl.Cinque_tibetani, dl.Meditazione, dl.Created_on)
+	_, err = config.DB.Exec(queryDL, dl.Focus, dl.Fischio_orecchie, dl.Power_energy, dl.Dormito, dl.PR, dl.Ansia, dl.Arrabiato, dl.Irritato, dl.Depresso, dl.Cinque_tibetani, dl.Meditazione, dl.CreatedOn)
 	if err != nil {
 		return dl, errors.New("500. Internal Server Error." + err.Error())
 	}
@@ -231,7 +244,7 @@ func UpdateDL(r *http.Request) (DayLevel, error) {
 	if err != nil {
 		// handle the error in some way
 	}
-	dl.Created_on = time.Now()
+	dl.CreatedOn = time.Now()
 
 	/*
 		if dl.Isbn == "" || dl.Title == "" || dl.Author == "" || p == "" {

@@ -1,0 +1,17 @@
+{{template "header"}}
+        <title>Update Day Levels</title>
+</head>
+
+<body>
+{{template "navbar"}}
+<h1>Update a DayLevel</h1>
+<form method="post" action="/dls/update/process">
+    <input type="text" name="Id" value="{{.Id}}" class="field left" readonly="readonly">
+    <input type="text" name="Focus" placeholder="Focus" required autofocus value="{{.Focus}}">
+    <input type="text" name="Arrabiato" placeholder="Arrabiato" required autofocus value="{{.Arrabiato}}">
+    <input type="text" name="Depresso" placeholder="Depresso" required autofocus value="{{.Depresso}}">
+    <input type="submit">
+</form>
+
+</body>
+{{template "footer"}}

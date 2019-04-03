@@ -1,0 +1,23 @@
+ {{ template "header"}}
+    <title>Document</title>
+</head>
+<body>
+{{template "navbar"}}
+<div class='container'>
+    <form method="post">
+
+        <input type="email" name="Username" placeholder="email"><br>
+        <input type="text" name="password" placeholder="password"><br>
+        <input type="text" name="firstname" placeholder="first name"><br>
+        <input type="text" name="lastname" placeholder="last name"><br>
+        <label for="sr">Role</label>
+        <select name="role" id="sr">
+            <option value="User">User</option>
+            <option value="admin">admin</option>
+            <option value="007">007</option>
+        </select>
+        <input type="submit">
+
+    </form>
+</div>
+{{template "footer"}}

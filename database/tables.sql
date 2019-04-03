@@ -11,5 +11,5 @@ CREATE TABLE daylevels(
  depresso  integer NOT NULL,
  cinque_tibetani BOOLEAN NOT NULL,
  meditazione BOOLEAN NOT NULL,
- created_on TIMESTAMP NOT NULL
+ createdOn TIMESTAMP NOT NULL
 );

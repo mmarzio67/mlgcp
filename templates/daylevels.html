@@ -1,0 +1,13 @@
+{{template "header"}}
+        <title>Day Levels</title>
+</head>
+
+<body>
+{{template "navbar"}}
+{{range .}}
+<p><a href="/dls/show?id={{.Id}}">{{.Id}} :</a>{{.Focus}} - {{.Arrabiato}} - {{.Depresso}} - {{.CreatedOn}}<a href="dls/update?id={{.Id}}">update</a>  - <a href="/dls/delete/process?id={{.Id}}">delete</a> </p>
+{{end}}
+
+<p class="link"><a href="/dls/create">Insert a DayLevel</a></p>
+</body>
+{{template "footer"}}

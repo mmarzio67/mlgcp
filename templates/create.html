@@ -1,0 +1,32 @@
+{{template "header"}}
+        <title>Create Day Level</title>
+</head>
+
+<body>
+{{template "navbar"}}
+<h1>Create A New Daylevel</h1>
+<form method="post" action="/dls/create/process">
+    <input type="number" step="1" min="1" max="9" name="focus" placeholder="focus" required>
+    <input type="number" step="1" min="1" max="9" name="fischio_orecchie" placeholder="Fischio orecchie" required>
+    <input type="number" step="1" min="1" max="9" name="power_energy" placeholder="Livello energia" required>
+    <input type="number" step="1" min="1" max="9" name="dormito" placeholder="Qualità sonno" required>
+    <input type="number" step="1" min="1" max="9" name="pr" placeholder="Public relations" required>
+    <input type="number" step="1" min="1" max="9" name="ansia" placeholder="Livello ansia" required>
+    <input type="number" step="1" min="1" max="9" name="arrabiato" placeholder="Arrabiato" required>
+    <input type="number" step="1" min="1" max="9" name="irritato" placeholder="Irritato" required>
+    <input type="number" step="1" min="1" max="9" name="depresso" placeholder="Depresso" required>
+
+    <select name="cinque_tibetani">
+        <option value="True">Fatto</option>
+        <option value="False">Non fatto</option>
+    </select>
+
+    <select name="meditazione">
+        <option value="True">Fatta</option>
+        <option value="False">Non fatta</option>
+    </select>
+    <input type="submit">
+</form>
+
+</body>
+{{template "footer"}}

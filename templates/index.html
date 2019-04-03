@@ -1,0 +1,25 @@
+{{template "header"}}
+    <title>Time Tracker</title>
+</head>
+
+<body>
+{{template "navbar"}}
+    {{if .First}}
+    User NAME {{.UserName}}<br>
+    PASSWORD {{.Password}}<br>
+    FIRST {{.First}}<br>
+    LAST {{.Last}}<br>
+    <h2><a href="/logout">log out</a></h2>
+    <h2><a href="/entry">register activity</a></h2>
+    <h2><a href="/sel">show all activities</a></h2>
+
+
+    {{else}}
+    <h2><a href="/signup">sign up</a></h2>
+    <h2><a href="/login">log in</a></h2>
+    {{end}}
+
+    <br>
+    <h2>Go to <a href="/bar">the bar</a></h2>
+
+{{template "footer"}}
