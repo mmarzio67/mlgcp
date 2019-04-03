@@ -2,7 +2,7 @@ package daylevels
 
 import (
 	"database/sql"
-	"mmarzio/medaliving/webapp/config"
+	"github.com/mmarzio67/ml/config"
 	"net/http"
 )
 

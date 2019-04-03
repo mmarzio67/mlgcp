@@ -1,7 +1,7 @@
 package daylevels
 
 import (
-	"mmarzio/medaliving/webapp/config"
+	"github.com/mmarzio67/ml/config"
 	"net/http"
 	"time"
 

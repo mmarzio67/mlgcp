@@ -3,7 +3,7 @@ package daylevels
 import (
 	"errors"
 	"fmt"
-	"mmarzio/medaliving/webapp/config"
+	"github.com/mmarzio67/ml/config"
 	"net/http"
 	"strconv"
 	"time"

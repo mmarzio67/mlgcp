@@ -1,8 +1,9 @@
 package main
 
 import (
-	"mmarzio/medaliving/webapp/daylevels"
 	"net/http"
+
+	"github.com/mmarzio67/ml/daylevels"
 )
 
 func main() {
