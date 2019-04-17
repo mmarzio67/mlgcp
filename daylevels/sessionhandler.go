@@ -1,17 +1,19 @@
 package daylevels
 
 import (
-	"github.com/mmarzio67/ml/config"
+	"fmt"
 	"net/http"
 	"time"
 
+	_ "github.com/lib/pq"
+	"github.com/mmarzio67/ml/config"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func Bar(w http.ResponseWriter, req *http.Request) {
 	u := getUser(w, req)
-	if !alreadyLoggedIn(w, req) {
+	if !AlreadyLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
@@ -24,7 +26,7 @@ func Bar(w http.ResponseWriter, req *http.Request) {
 }
 
 func Signup(w http.ResponseWriter, req *http.Request) {
-	if alreadyLoggedIn(w, req) {
+	if AlreadyLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
@@ -37,11 +39,17 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		f := req.FormValue("firstname")
 		l := req.FormValue("lastname")
 		r := req.FormValue("role")
-		// Username taken?
-		if _, ok := dbUsers[un]; ok {
-			http.Error(w, "Username already taken", http.StatusForbidden)
+
+		bs := []byte(p)
+		u = User{un, bs, f, l, r}
+
+		usertaken := SignupAuth(&u)
+
+		if usertaken != nil {
+			fmt.Println(usertaken)
 			return
 		}
+
 		// create session
 		sID, _ := uuid.NewV4()
 		c := &http.Cookie{
@@ -51,8 +59,11 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		c.MaxAge = sessionLength
 		http.SetCookie(w, c)
 		dbSessions[c.Value] = Session{un, time.Now()}
+
 		// store User in dbUsers
-		bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
+		spwd := []byte(p)
+		fmt.Println(spwd)
+		bs, err := bcrypt.GenerateFromPassword(spwd, bcrypt.DefaultCost)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
@@ -63,12 +74,13 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
+
 	showSessions() // for demonstration purposes
 	config.TPL.ExecuteTemplate(w, "signup.html", u)
 }
 
 func Login(w http.ResponseWriter, req *http.Request) {
-	if alreadyLoggedIn(w, req) {
+	if AlreadyLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
@@ -106,7 +118,7 @@ func Login(w http.ResponseWriter, req *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, req *http.Request) {
-	if !alreadyLoggedIn(w, req) {
+	if !AlreadyLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}

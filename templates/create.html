@@ -6,25 +6,45 @@
 {{template "navbar"}}
 <h1>Create A New Daylevel</h1>
 <form method="post" action="/dls/create/process">
-    <input type="number" step="1" min="1" max="9" name="focus" placeholder="focus" required>
-    <input type="number" step="1" min="1" max="9" name="fischio_orecchie" placeholder="Fischio orecchie" required>
-    <input type="number" step="1" min="1" max="9" name="power_energy" placeholder="Livello energia" required>
-    <input type="number" step="1" min="1" max="9" name="dormito" placeholder="Qualità sonno" required>
-    <input type="number" step="1" min="1" max="9" name="pr" placeholder="Public relations" required>
-    <input type="number" step="1" min="1" max="9" name="ansia" placeholder="Livello ansia" required>
-    <input type="number" step="1" min="1" max="9" name="arrabiato" placeholder="Arrabiato" required>
-    <input type="number" step="1" min="1" max="9" name="irritato" placeholder="Irritato" required>
-    <input type="number" step="1" min="1" max="9" name="depresso" placeholder="Depresso" required>
+   <label for="focus">Focus:</label>
+    <input type="number" step="1" min="1" max="9" name="focus" placeholder="focus" required><br>
 
+    <label for="fischio_orecchie">Fischio orecchie:</label>
+    <input type="number" step="1" min="1" max="9" name="fischio_orecchie" placeholder="Fischio orecchie" required><br>
+
+    <label for="power_energy">Livello energia:</label>
+    <input type="number" step="1" min="1" max="9" name="power_energy" placeholder="Livello energia" required><br>
+
+    <label for="dormito">Qualità sonno:</label>
+    <input type="number" step="1" min="1" max="9" name="dormito" placeholder="Qualità sonno" required><br>
+
+    <label for="pr">Public relations:</label>
+    <input type="number" step="1" min="1" max="9" name="pr" placeholder="Public relations" required><br>
+
+    <label for="ansia">Livello ansia:</label>
+    <input type="number" step="1" min="1" max="9" name="ansia" placeholder="Livello ansia" required><br>
+
+    <label for="arrabiato">Arrabiato:</label>
+    <input type="number" step="1" min="1" max="9" name="arrabiato" placeholder="Arrabiato" required><br>
+
+    <label for="irritato">Irritato:</label>
+    <input type="number" step="1" min="1" max="9" name="irritato" placeholder="Irritato" required><br>
+
+    <label for="depresso">Depresso:</label>
+    <input type="number" step="1" min="1" max="9" name="depresso" placeholder="Depresso" required><br>
+    
+    <label for="cinque_tibetani">Cinque tibetani:</label>
     <select name="cinque_tibetani">
         <option value="True">Fatto</option>
         <option value="False">Non fatto</option>
-    </select>
+    </select><br>
 
+    <label for="meditazione">Mediatazione:</label>
     <select name="meditazione">
         <option value="True">Fatta</option>
         <option value="False">Non fatta</option>
-    </select>
+    </select><br>
+    
     <input type="submit">
 </form>
 

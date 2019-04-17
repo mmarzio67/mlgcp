@@ -1,0 +1,26 @@
+{{template "header"}}
+        <title>Pensiero del giorno</title>
+</head>
+
+<body>
+{{template "navbar"}}
+<h1>Crea un nuovo pensiero</h1>
+<form method="post" action="/med/create/process">
+
+    <label for="pensiero">Pensiero del giorno:</label>
+    <textarea class="form-control rounded-0" name="pensiero" rows="10" placeholder="Testo pensiero del giorno" required></textarea>
+    
+    <label for="giorno">Giorno preferenziale:</label>
+    <input type="number" min="1" max="31" name="giorno" placeholder="giorno preferenziale" required><br>
+    
+    <label for="mese">Mese preferenziale:</label>
+    <input type="text" name="mese" placeholder="mese preferenziale" required><br>
+
+    <label for="autore">Autore:</label>
+    <input type="text" name="autore" placeholder="autore testo" required><br>
+
+    <input type="submit">
+</form>
+
+</body>
+{{template "footer"}}

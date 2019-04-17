@@ -2,12 +2,13 @@ package daylevels
 
 import (
 	"database/sql"
-	"github.com/mmarzio67/ml/config"
 	"net/http"
+
+	"github.com/mmarzio67/ml/config"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
@@ -16,9 +17,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
-
 	dls, err := AllDL()
 	if err != nil {
+		http.Redirect(w, r, "/dls/create", http.StatusSeeOther)
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -27,7 +28,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Show(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -51,7 +52,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 }
 
 func Create(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -59,7 +60,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateProcess(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -81,7 +82,7 @@ func CreateProcess(w http.ResponseWriter, r *http.Request) {
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -105,7 +106,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateProcess(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -125,7 +126,7 @@ func UpdateProcess(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteProcess(w http.ResponseWriter, r *http.Request) {
-	if !alreadyLoggedIn(w, r) {
+	if !AlreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
