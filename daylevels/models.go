@@ -56,10 +56,10 @@ func SignupAuth(u *User) error {
 	// Salt and hash the password using the bcrypt algorithm
 	// The second argument is the cost of hashing, which we arbitrarily set as 8 (this value can be more or less, depending on the computing power you wish to utilize)
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(Password), 8)
-	fmt.Println(hashedPassword)
+	fmt.Println(string(hashedPassword))
 
 	// Next, insert the username, along with the hashed password into the database
-	if _, err = config.DB.Query("insert into users username, pwd, first_name, last_name, idr values ($1, $2,$3,$4,$5)", u.UserName, string(hashedPassword), u.First, u.Last, 1); err != nil {
+	if _, err = config.DB.Query("insert into users (user_name, user_pwd, first_name, last_name, idrole) values ($1, $2,$3,$4,$5)", u.UserName, string(hashedPassword), u.First, u.Last, 1); err != nil {
 		// If there is any issue with inserting into the database, return a 500 error
 		return err
 	}

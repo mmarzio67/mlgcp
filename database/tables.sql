@@ -34,6 +34,7 @@ id serial PRIMARY KEY,
 first_name text NOT NULL,
 last_name text NOT NULL,
 user_name text NOT NULL,
+user_pwd text NOT NULL,
 idrole integer NOT NULL
 );
 
@@ -54,5 +55,9 @@ ALTER TABLE meditations
   ADD COLUMN pref_month VARCHAR(15),
   ADD COLUMN pref_day integer;
 
-  ALTER TABLE users
+ALTER TABLE users
   ADD COLUMN user_pwd text;
+
+ALTER TABLE users
+    ALTER COLUMN user_name TYPE VARCHAR(50)
+    ADD UNIQUE (user_name);
