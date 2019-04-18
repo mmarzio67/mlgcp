@@ -59,20 +59,19 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		c.MaxAge = sessionLength
 		http.SetCookie(w, c)
 		dbSessions[c.Value] = Session{un, time.Now()}
-
 		// store User in dbUsers
-		spwd := []byte(p)
-		fmt.Println(spwd)
-		bs, err := bcrypt.GenerateFromPassword(spwd, bcrypt.DefaultCost)
+		bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 		u = User{un, bs, f, l, r}
 		dbUsers[un] = u
+
 		// redirect
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
+
 	}
 
 	showSessions() // for demonstration purposes
@@ -84,21 +83,30 @@ func Login(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
-	var u User
+
+	var pc Credentials
+	var u *User
+	var errAuth error
+
 	// process form submission
 	if req.Method == http.MethodPost {
 		un := req.FormValue("Username")
 		p := req.FormValue("password")
-		// is there a Username?
-		u, ok := dbUsers[un]
-		if !ok {
-			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
+
+		// check in the persistancy if this username exists
+		pc = Credentials{un, p}
+		u, errAuth = LoginCred(&pc)
+
+		if errAuth != nil {
+			http.Error(w, "Something wrong with the user authentication", http.StatusForbidden)
 			return
 		}
+
 		// does the entered password match the stored password?
 		err := bcrypt.CompareHashAndPassword(u.Password, []byte(p))
 		if err != nil {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
+			fmt.Println(u.Password)
 			return
 		}
 		// create session

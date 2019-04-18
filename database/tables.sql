@@ -33,7 +33,7 @@ CREATE TABLE users (
 id serial PRIMARY KEY,
 first_name text NOT NULL,
 last_name text NOT NULL,
-user_name text NOT NULL,
+user_name VARCHAR(50) UNIQUE,
 user_pwd text NOT NULL,
 idrole integer NOT NULL
 );
@@ -59,5 +59,16 @@ ALTER TABLE users
   ADD COLUMN user_pwd text;
 
 ALTER TABLE users
-    ALTER COLUMN user_name TYPE VARCHAR(50)
+    ALTER COLUMN user_name TYPE VARCHAR(50),
     ADD UNIQUE (user_name);
+
+
+INSERT INTO roles (role)
+    VALUES ('user');
+
+
+##UPDATE roles SET role = 'user';
+
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ml;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ml; 
