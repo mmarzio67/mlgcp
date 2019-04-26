@@ -9,6 +9,7 @@
   <thead class="black white-text">
     <tr>
       <th scope="col">Id</th>
+      <th scope="col">Data</th>
       <th scope="col">Focus</th>
       <th scope="col">Fischio</th>
       <th scope="col">Energia</th>
@@ -20,13 +21,14 @@
       <th scope="col">Depresso</th>
       <th scope="col">Sport</th>
       <th scope="col">Meditazione</th>
-      <th scope="col">Data</th>
+   
     </tr>
   </thead>
   <tbody>
   {{range .}}
     <tr>
       <th scope="row"><a href="/dls/show?id={{.Id}}">{{.Id}}</a></th>
+      <td>{{.CreatedOn}}</td>
       <td>{{.Focus}}</td>
       <td>{{.FischioOrecchie}}</td>
       <td>{{.PowerEnergy}}</td>
@@ -38,7 +40,6 @@
       <td>{{.Depresso}}</td>
       <td>{{.CinqueTib}}</td>
       <td>{{.Meditazione}}</td>
-      <td>{{.CreatedOn}}</td>
       <td><a href="dls/update?id={{.Id}}">update</a></td>
       <td><a href="/dls/delete/process?id={{.Id}}">delete</td>
     </tr>

@@ -4,12 +4,51 @@
 
 <body>
 {{template "navbar"}}
-<h1>Update a DayLevel</h1>
-<form method="post" action="/dls/update/process">
-    <input type="text" name="Id" value="{{.Id}}" class="field left" readonly="readonly">
-    <input type="text" name="Focus" placeholder="Focus" required autofocus value="{{.Focus}}">
-    <input type="text" name="Arrabiato" placeholder="Arrabiato" required autofocus value="{{.Arrabiato}}">
-    <input type="text" name="Depresso" placeholder="Depresso" required autofocus value="{{.Depresso}}">
+<h1>Update DayLevel #{{.Id}}</h1>
+<form method="post" action="/dls/update/process">      
+
+    <label for="Id">Id:</label>
+    <input type="text" name="Id" value="{{.Id}}" class="field left" readonly="readonly"><br>
+
+    <label for="Focus">Focus:</label>
+    <input type="text" name="Focus" placeholder="Focus" required autofocus value="{{.Focus}}"><br>
+
+    <label for="fischio_orecchie">Fischio orecchie:</label>
+    <input type="text" name="fischio_orecchie" placeholder="Fischio orecchie" required autofocus value="{{.FischioOrecchie}}"><br>
+
+    <label for="power_energy">Livello energia:</label>
+    <input type="text" name="power_energy" placeholder="Livello energia" required autofocus value="{{.PowerEnergy}}"><br>
+
+    <label for="dormito">Qualità sonno:</label>
+    <input type="text" name="dormito" placeholder="Qualità sonno" required autofocus value="{{.Dormito}}"><br>
+
+    <label for="pr">Public relations:</label>
+    <input type="text" name="pr" placeholder="Public relations" required autofocus value="{{.PR}}"><br>
+
+    <label for="ansia">Ansia:</label>
+    <input type="text" name="ansia" placeholder="Livello ansia" required autofocus value="{{.Ansia}}"><br>
+
+    <label for="arrabiato">Arrabiato:</label>
+    <input type="text" name="arrabiato" placeholder="Arrabiato" required autofocus value="{{.Arrabiato}}"><br>
+
+    <label for="irritato">Irritato:</label>
+    <input type="text" name="irritato" placeholder="Irritato" required autofocus value="{{.Irritato}}"><br>
+
+    <label for="depresso">Depresso:</label>
+    <input type="text" name="depresso" placeholder="Depresso" required autofocus value="{{.Depresso}}"><br>
+ 
+    <label for="cinque_tibetani">Cinque tibetani:</label>
+    <select name="cinque_tibetani">
+        <option value="True">Fatto</option>
+        <option value="False">Non fatto</option>
+    </select><br>
+
+    <label for="meditazione">Mediatazione:</label>
+    <select name="meditazione">
+        <option value="True">Fatta</option>
+        <option value="False">Non fatta</option>
+    </select><br>
+
     <input type="submit">
 </form>
 

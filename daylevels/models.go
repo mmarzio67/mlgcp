@@ -354,24 +354,118 @@ func UpdateDL(r *http.Request) (DayLevel, error) {
 
 	dl.Id, err = strconv.ParseInt(r.FormValue("Id"), 10, 64)
 
-	dl.Focus, err = strconv.ParseInt(r.FormValue("Focus"), 10, 64)
+	dl.Focus, err = strconv.ParseInt(r.FormValue("focus"), 10, 64)
 	if err != nil {
 		// handle the error in some way
+		fmt.Println("focus entry not accepted")
+		fmt.Println(err)
 	}
 
-	dl.Arrabiato, err = strconv.ParseInt(r.FormValue("Arrabiato"), 10, 64)
+	dl.FischioOrecchie, err = strconv.ParseInt(r.FormValue("fischio_orecchie"), 10, 64)
 	if err != nil {
 		// handle the error in some way
+		fmt.Println("Fischio orecchie entry not accepted")
+		fmt.Println(err)
 	}
 
-	dl.Depresso, err = strconv.ParseInt(r.FormValue("Depresso"), 10, 64)
+	dl.PowerEnergy, err = strconv.ParseInt(r.FormValue("power_energy"), 10, 64)
 	if err != nil {
 		// handle the error in some way
+		fmt.Println("Power energy entry not accepted")
+		fmt.Println(err)
 	}
-	dl.CreatedOn = time.Now()
+
+	dl.Dormito, err = strconv.ParseInt(r.FormValue("dormito"), 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Dormito entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.PR, err = strconv.ParseInt(r.FormValue("pr"), 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Public relations entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.Ansia, err = strconv.ParseInt(r.FormValue("ansia"), 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Ansia entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.Arrabiato, err = strconv.ParseInt(r.FormValue("arrabiato"), 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Arrabiato entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.Irritato, err = strconv.ParseInt(r.FormValue("irritato"), 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("irritato entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.Depresso, err = strconv.ParseInt(r.FormValue("depresso"), 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Depresso entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.CinqueTib, err = strconv.ParseBool(r.FormValue("cinque_tibetani"))
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Cinque tibetani entry not accepted")
+		fmt.Println(err)
+	}
+
+	dl.Meditazione, err = strconv.ParseBool(r.FormValue("meditazione"))
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("Meditazione entry not accepted")
+		fmt.Println(err)
+	}
+
+	t := time.Now()
+	fmt.Println(t.Format("2006-01-02 15:04:05"))
+	dl.CreatedOn = t
+	fmt.Println(dl.CreatedOn)
+
+	updateQuery := `UPDATE daylevels 
+			  SET focus= $1, 
+			  fischio_orecchie=$2,
+			  power_energy=$3,
+			  dormito=$4,
+			  pr=$5,
+			  ansia=$6,
+			  arrabiato=$7,
+			  irritato=$8,
+			  depresso=$9,
+			  cinque_tibetani=$10,
+			  meditazione=$11,
+			  createdon=$12			 
+			  WHERE id=$13`
 
 	// insert values
-	_, err = config.DB.Exec("UPDATE daylevels SET focus= $1, arrabiato=$2, depresso=$3 WHERE id=$4;", dl.Focus, dl.Arrabiato, dl.Depresso, dl.Id)
+	_, err = config.DB.Exec(updateQuery,
+		dl.Focus,
+		dl.FischioOrecchie,
+		dl.PowerEnergy,
+		dl.Dormito,
+		dl.PR,
+		dl.Ansia,
+		dl.Arrabiato,
+		dl.Irritato,
+		dl.Depresso,
+		dl.CinqueTib,
+		dl.Meditazione,
+		dl.Id)
+
 	if err != nil {
 		return dl, err
 	}

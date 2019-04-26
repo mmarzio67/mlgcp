@@ -5,7 +5,40 @@
 {{template "navbar"}}
 <p>Updated Daylevels</p>
 
-<p><a href="/dls/show?id={{.Id}}">{{.Id}} - {{.Focus}} - {{.Arrabiato}} - {{.Irritato}} {{.Created_on}}</a></p>
+<table class="table">
+  <thead class="black white-text">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Data</th>
+      <th scope="col">Focus</th>
+      <th scope="col">Fischio</th>
+      <th scope="col">Energia</th>
+      <th scope="col">Dormito</th>
+      <th scope="col">PR</th>
+      <th scope="col">Ansia</th>
+      <th scope="col">Arrabiato</th>
+      <th scope="col">Irritato</th>
+      <th scope="col">Depresso</th>
+      <th scope="col">Sport</th>
+      <th scope="col">Meditazione</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">{{.Id}}</th>
+      <td>{{.CreatedOn}}</td>
+      <td>{{.Focus}}</td>
+      <td>{{.FischioOrecchie}}</td>
+      <td>{{.PowerEnergy}}</td>
+      <td>{{.Dormito}}</td>
+      <td>{{.PR}}</td>
+      <td>{{.Ansia}}</td>
+      <td>{{.Arrabiato}}</td>
+      <td>{{.Irritato}}</td>
+      <td>{{.Depresso}}</td>
+      <td>{{.CinqueTib}}</td>
+      <td>{{.Meditazione}}</td>
+ 
 <p class="link"><a href="/dls">All Daylevels</a></p>
 </body>
 {{template "footer"}}
