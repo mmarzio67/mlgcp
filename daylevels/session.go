@@ -9,10 +9,10 @@ import (
 )
 
 var dbUsers = map[string]User{}       // user ID, user
-var dbSessions = map[string]Session{} // session ID, session
+var dbSessions = map[string]session{} // session ID, session
 var dbSessionsCleaned time.Time
 
-const sessionLength int = 30
+const sessionLength int = 300
 
 func getUser(w http.ResponseWriter, req *http.Request) User {
 	// get cookie
@@ -31,9 +31,9 @@ func getUser(w http.ResponseWriter, req *http.Request) User {
 	// if the User exists already, get User
 	var u User
 	if s, ok := dbSessions[c.Value]; ok {
-		s.LastActivity = time.Now()
+		s.lastActivity = time.Now()
 		dbSessions[c.Value] = s
-		u = dbUsers[s.Un]
+		u = dbUsers[s.un]
 	}
 	return u
 }
@@ -45,10 +45,10 @@ func AlreadyLoggedIn(w http.ResponseWriter, req *http.Request) bool {
 	}
 	s, ok := dbSessions[c.Value]
 	if ok {
-		s.LastActivity = time.Now()
+		s.lastActivity = time.Now()
 		dbSessions[c.Value] = s
 	}
-	_, ok = dbUsers[s.Un]
+	_, ok = dbUsers[s.un]
 	// refresh session
 	c.MaxAge = sessionLength
 	http.SetCookie(w, c)
@@ -59,7 +59,7 @@ func cleanSessions() {
 	fmt.Println("BEFORE CLEAN") // for demonstration purposes
 	showSessions()              // for demonstration purposes
 	for k, v := range dbSessions {
-		if time.Now().Sub(v.LastActivity) > (time.Second * 30) {
+		if time.Now().Sub(v.lastActivity) > (time.Second * 30) {
 			delete(dbSessions, k)
 		}
 	}
@@ -72,7 +72,7 @@ func cleanSessions() {
 func showSessions() {
 	fmt.Println("********")
 	for k, v := range dbSessions {
-		fmt.Println(k, v.Un)
+		fmt.Println(k, v.un)
 	}
 	fmt.Println("")
 }

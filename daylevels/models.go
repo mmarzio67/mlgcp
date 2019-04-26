@@ -14,19 +14,19 @@ import (
 )
 
 type DayLevel struct {
-	Id               int64
-	Focus            int64
-	Fischio_orecchie int64
-	Power_energy     int64
-	Dormito          int64
-	PR               int64
-	Ansia            int64
-	Arrabiato        int64
-	Irritato         int64
-	Depresso         int64
-	Cinque_tibetani  bool
-	Meditazione      bool
-	CreatedOn        time.Time
+	Id              int64
+	Focus           int64
+	FischioOrecchie int64
+	PowerEnergy     int64
+	Dormito         int64
+	PR              int64
+	Ansia           int64
+	Arrabiato       int64
+	Irritato        int64
+	Depresso        int64
+	CinqueTib       bool
+	Meditazione     bool
+	CreatedOn       time.Time
 }
 
 type User struct {
@@ -43,9 +43,9 @@ type Credentials struct {
 	Username string
 }
 
-type Session struct {
-	Un           string
-	LastActivity time.Time
+type session struct {
+	un           string
+	lastActivity time.Time
 }
 
 func SignupAuth(u *User) error {
@@ -66,10 +66,10 @@ func SignupAuth(u *User) error {
 	return err
 }
 
-func LoginCred(creds *Credentials) (*User, error) {
+func (creds *Credentials) LoginCred() (u *User, e error) {
 
 	var err error
-	result := config.DB.QueryRow("select first_name, last_name, user_name, user_pwd, idrole from users where username=$1", creds.Username)
+	result := config.DB.QueryRow("select first_name, last_name, user_name, user_pwd, idrole from users where user_name=$1", creds.Username)
 	if err != nil {
 		fmt.Println("something wrong with the query to the credentials persistance")
 		return nil, err
@@ -142,8 +142,25 @@ func SigninAuth(w http.ResponseWriter, r *http.Request) {
 	// The default 200 status is sent
 }
 
-func AllDL() ([]DayLevel, error) {
-	rows, err := config.DB.Query("SELECT id, focus, arrabiato, depresso, createdon FROM daylevels")
+func AllDL() (*[]DayLevel, error) {
+
+	queryAllDL := `SELECT id, 
+					focus, 
+					fischio_orecchie, 
+					power_energy,
+					dormito,
+					pr,
+					ansia,
+					arrabiato, 
+					irritato,
+					depresso, 
+					cinque_tibetani,
+					meditazione,
+					createdon
+					FROM daylevels
+					WHERE uid=$1`
+
+	rows, err := config.DB.Query(queryAllDL, 6)
 	if err != nil {
 		return nil, err
 	}
@@ -155,18 +172,31 @@ func AllDL() ([]DayLevel, error) {
 		err := rows.Scan(
 			&dl.Id,
 			&dl.Focus,
+			&dl.FischioOrecchie,
+			&dl.PowerEnergy,
+			&dl.Dormito,
+			&dl.PR,
+			&dl.Ansia,
 			&dl.Arrabiato,
+			&dl.Irritato,
 			&dl.Depresso,
+			&dl.CinqueTib,
+			&dl.Meditazione,
 			&dl.CreatedOn)
+
 		if err != nil {
 			return nil, err
 		}
 		dls = append(dls, dl)
+		fmt.Println("all'interno di allDL")
+		fmt.Println(dls)
+		fmt.Println(&dls)
+
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	return dls, nil
+	return &dls, nil
 }
 
 func OneDL(r *http.Request) (DayLevel, error) {
@@ -210,14 +240,14 @@ func PutDL(r *http.Request) (DayLevel, error) {
 		fmt.Println(err)
 	}
 
-	dl.Fischio_orecchie, err = strconv.ParseInt(r.FormValue("fischio_orecchie"), 10, 64)
+	dl.FischioOrecchie, err = strconv.ParseInt(r.FormValue("fischio_orecchie"), 10, 64)
 	if err != nil {
 		// handle the error in some way
 		fmt.Println("Fischio orecchie entry not accepted")
 		fmt.Println(err)
 	}
 
-	dl.Power_energy, err = strconv.ParseInt(r.FormValue("power_energy"), 10, 64)
+	dl.PowerEnergy, err = strconv.ParseInt(r.FormValue("power_energy"), 10, 64)
 	if err != nil {
 		// handle the error in some way
 		fmt.Println("Power energy entry not accepted")
@@ -266,7 +296,7 @@ func PutDL(r *http.Request) (DayLevel, error) {
 		fmt.Println(err)
 	}
 
-	dl.Cinque_tibetani, err = strconv.ParseBool(r.FormValue("cinque_tibetani"))
+	dl.CinqueTib, err = strconv.ParseBool(r.FormValue("cinque_tibetani"))
 	if err != nil {
 		// handle the error in some way
 		fmt.Println("Cinque tibetani entry not accepted")
@@ -295,10 +325,12 @@ func PutDL(r *http.Request) (DayLevel, error) {
 			irritato,
 			depresso,
 			cinque_tibetani,
-			meditazione) 
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
-
-	_, err = config.DB.Exec(queryDL, dl.Focus, dl.Fischio_orecchie, dl.Power_energy, dl.Dormito, dl.PR, dl.Ansia, dl.Arrabiato, dl.Irritato, dl.Depresso, dl.Cinque_tibetani, dl.Meditazione)
+			meditazione,
+			uid) 
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12)`
+	var uid int
+	uid = 6
+	_, err = config.DB.Exec(queryDL, dl.Focus, dl.FischioOrecchie, dl.PowerEnergy, dl.Dormito, dl.PR, dl.Ansia, dl.Arrabiato, dl.Irritato, dl.Depresso, dl.CinqueTib, dl.Meditazione, uid)
 	if err != nil {
 		fmt.Println(dl)
 		return dl, errors.New("500. Internal Server Error." + err.Error())

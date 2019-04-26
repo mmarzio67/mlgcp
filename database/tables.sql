@@ -71,4 +71,19 @@ INSERT INTO roles (role)
 
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ml;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ml; 
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ml;
+
+
+ALTER TABLE daylevels
+    ADD COLUMN uid integer,
+    ADD CONSTRAINT fk_daylevels_users FOREIGN KEY (uid) REFERENCES users (id);
+
+
+UPDATE daylevels SET uid = 1;
+
+
+ALTER TABLE daylevels
+    ALTER COLUMN uid TYPE integer;
+    
+ALTER TABLE daylevels
+    ALTER COLUMN uid SET NOT NULL;

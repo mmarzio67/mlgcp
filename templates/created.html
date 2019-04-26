@@ -1,11 +1,49 @@
 {{template "header"}}
-        <title>Create DaylevelDay Levels</title>
+        <title>Day Level created</title>
 </head>
+
 <body>
 {{template "navbar"}}
-<p>Created A New Daylevel</p>
 
-<p><a href="/dls/show?id={{.Id}}">{{.Id}} : </a>{{.Focus}} - {{.Arrabiato}} - {{.Ansia}} - {{.Irritato}} - {{.CreatedOn}}</p>
+<table class="table">
+  <thead class="black white-text">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Focus</th>
+      <th scope="col">Fischio</th>
+      <th scope="col">Energia</th>
+      <th scope="col">Dormito</th>
+      <th scope="col">PR</th>
+      <th scope="col">Ansia</th>
+      <th scope="col">Arrabiato</th>
+      <th scope="col">Irritato</th>
+      <th scope="col">Depresso</th>
+      <th scope="col">Sport</th>
+      <th scope="col">Meditazione</th>
+      <th scope="col">Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"><a href="/dls/show?id={{.Id}}">{{.Id}}</a></th>
+      <td>{{.Focus}}</td>
+      <td>{{.FischioOrecchie}}</td>
+      <td>{{.PowerEnergy}}</td>
+      <td>{{.Dormito}}</td>
+      <td>{{.PR}}</td>
+      <td>{{.Ansia}}</td>
+      <td>{{.Arrabiato}}</td>
+      <td>{{.Irritato}}</td>
+      <td>{{.Depresso}}</td>
+      <td>{{.CinqueTib}}</td>
+      <td>{{.Meditazione}}</td>
+      <td>{{.CreatedOn}}</td>
+      <td><a href="dls/update?id={{.Id}}">update</a></td>
+      <td><a href="/dls/delete/process?id={{.Id}}">delete</td>
+    </tr>
+  </tbody>
+</table>
+
 <p class="link"><a href="/dls">All Daylevels</a></p>
 </body>
 {{template "footer"}}

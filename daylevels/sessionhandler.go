@@ -30,7 +30,7 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
-	var u User
+	var us User
 	// process form submission
 	if req.Method == http.MethodPost {
 		// get form values
@@ -41,9 +41,9 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		r := req.FormValue("role")
 
 		bs := []byte(p)
-		u = User{un, bs, f, l, r}
+		us = User{un, bs, f, l, r}
 
-		usertaken := SignupAuth(&u)
+		usertaken := SignupAuth(&us)
 
 		if usertaken != nil {
 			fmt.Println(usertaken)
@@ -58,15 +58,15 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 		}
 		c.MaxAge = sessionLength
 		http.SetCookie(w, c)
-		dbSessions[c.Value] = Session{un, time.Now()}
+		dbSessions[c.Value] = session{un, time.Now()}
 		// store User in dbUsers
 		bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.MinCost)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-		u = User{un, bs, f, l, r}
-		dbUsers[un] = u
+		us = User{un, bs, f, l, r}
+		dbUsers[un] = us
 
 		// redirect
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -75,40 +75,40 @@ func Signup(w http.ResponseWriter, req *http.Request) {
 	}
 
 	showSessions() // for demonstration purposes
-	config.TPL.ExecuteTemplate(w, "signup.html", u)
+	config.TPL.ExecuteTemplate(w, "signup.html", us)
 }
 
 func Login(w http.ResponseWriter, req *http.Request) {
+	fmt.Println(req.Method)
 	if AlreadyLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
 
 	var pc Credentials
-	var u *User
+	var ur *User
 	var errAuth error
-
+	var un string
 	// process form submission
 	if req.Method == http.MethodPost {
-		un := req.FormValue("Username")
+		uf := req.FormValue("Username")
 		p := req.FormValue("password")
 
-		// check in the persistancy if this username exists
-		pc = Credentials{un, p}
-		u, errAuth = LoginCred(&pc)
-
+		pc = Credentials{p, uf}
+		ur, errAuth = pc.LoginCred()
 		if errAuth != nil {
 			http.Error(w, "Something wrong with the user authentication", http.StatusForbidden)
 			return
 		}
-
+		dbUsers[un] = *ur
 		// does the entered password match the stored password?
-		err := bcrypt.CompareHashAndPassword(u.Password, []byte(p))
+		err := bcrypt.CompareHashAndPassword(ur.Password, []byte(p))
 		if err != nil {
-			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
-			fmt.Println(u.Password)
+			fmt.Println(ur.Password)
+			http.Error(w, "Username and/or password do not match, dude", http.StatusForbidden)
 			return
 		}
+
 		// create session
 		sID, _ := uuid.NewV4()
 		c := &http.Cookie{
@@ -117,12 +117,14 @@ func Login(w http.ResponseWriter, req *http.Request) {
 		}
 		c.MaxAge = sessionLength
 		http.SetCookie(w, c)
-		dbSessions[c.Value] = Session{un, time.Now()}
+		//un := ur.UserName
+		dbSessions[c.Value] = session{un, time.Now()}
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
+
 	}
 	showSessions() // for demonstration purposes
-	config.TPL.ExecuteTemplate(w, "login.html", u)
+	config.TPL.ExecuteTemplate(w, "login.html", ur)
 }
 
 func Logout(w http.ResponseWriter, req *http.Request) {

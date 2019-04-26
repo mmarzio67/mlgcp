@@ -2,6 +2,7 @@ package daylevels
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/mmarzio67/ml/config"
@@ -24,7 +25,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config.TPL.ExecuteTemplate(w, "daylevels.html", dls)
+	config.TPL.ExecuteTemplate(w, "daylevels.html", &dls)
 }
 
 func Show(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +72,7 @@ func CreateProcess(w http.ResponseWriter, r *http.Request) {
 	}
 
 	dl, err := PutDL(r)
+	fmt.Println(dl)
 
 	if err != nil {
 		println("error in processing PutDL")
