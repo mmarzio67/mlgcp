@@ -3,7 +3,9 @@ package daylevels
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/mmarzio67/ml/config"
 )
@@ -25,31 +27,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config.TPL.ExecuteTemplate(w, "daylevels.html", &dls)
-}
-
-func Show(w http.ResponseWriter, r *http.Request) {
-	if !AlreadyLoggedIn(w, r) {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-
-	if r.Method != "GET" {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
-
-	dl, err := OneDL(r)
-	switch {
-	case err == sql.ErrNoRows:
-		http.NotFound(w, r)
-		return
-	case err != nil:
-		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		return
-	}
-
-	config.TPL.ExecuteTemplate(w, "show.html", dl)
+	config.TPL.ExecuteTemplate(w, "daylevels.html", dls)
 }
 
 func Create(w http.ResponseWriter, r *http.Request) {
@@ -94,7 +72,24 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dl, err := OneDL(r)
+	keys, ok := r.URL.Query()["id"]
+
+	if !ok || len(keys[0]) < 1 {
+		log.Println("Url Param 'Id' is missing")
+		return
+	}
+
+	// Query()["key"] will return an array of items,
+	// we only want the single item.
+
+	id, err := strconv.ParseInt(keys[0], 10, 64)
+	if err != nil {
+		// handle the error in some way
+		fmt.Println("id parameter reading accepted")
+		fmt.Println(err)
+	}
+
+	dl, err := OneDL(id)
 	switch {
 	case err == sql.ErrNoRows:
 		http.NotFound(w, r)

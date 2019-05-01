@@ -165,10 +165,9 @@ func AllDL() (*[]DayLevel, error) {
 		return nil, err
 	}
 	defer rows.Close()
-
+	dl := DayLevel{}
 	dls := make([]DayLevel, 0)
 	for rows.Next() {
-		dl := DayLevel{}
 		err := rows.Scan(
 			&dl.Id,
 			&dl.Focus,
@@ -189,8 +188,6 @@ func AllDL() (*[]DayLevel, error) {
 		}
 		dls = append(dls, dl)
 		fmt.Println("all'interno di allDL")
-		fmt.Println(dls)
-		fmt.Println(&dls)
 
 	}
 	if err = rows.Err(); err != nil {
@@ -199,35 +196,51 @@ func AllDL() (*[]DayLevel, error) {
 	return &dls, nil
 }
 
-func OneDL(r *http.Request) (DayLevel, error) {
+func OneDL(id int64) (*DayLevel, error) {
 
 	var err error
 	dl := DayLevel{}
-	id := r.FormValue("id")
+	fmt.Println(id)
 
-	/*
-		focus,err := strconv.ParseInt(r.FormValue("Focus"), 10, 64)
-		if err != nil {
-			// handle the error in some way
-		}
-	*/
+	oneQueryDL := `SELECT id,
+	focus, 
+	fischio_orecchie, 
+	power_energy,
+	dormito,
+	pr,
+	ansia,
+	arrabiato, 
+	irritato,
+	depresso, 
+	cinque_tibetani,
+	meditazione
+	FROM daylevels
+	WHERE id=$1`
 
-	row := config.DB.QueryRow("SELECT id, focus, arrabiato, depresso, createdon FROM daylevels WHERE id = $1", id)
+	row := config.DB.QueryRow(oneQueryDL, id)
 
 	err = row.Scan(
 		&dl.Id,
 		&dl.Focus,
+		&dl.FischioOrecchie,
+		&dl.PowerEnergy,
+		&dl.Dormito,
+		&dl.PR,
+		&dl.Ansia,
 		&dl.Arrabiato,
+		&dl.Irritato,
 		&dl.Depresso,
-		&dl.CreatedOn)
-	if err != nil {
-		return dl, err
-	}
+		&dl.CinqueTib,
+		&dl.Meditazione)
 
-	return dl, nil
+	if err != nil {
+		fmt.Println(err)
+		return &dl, err
+	}
+	return &dl, nil
 }
 
-func PutDL(r *http.Request) (DayLevel, error) {
+func PutDL(r *http.Request) (*DayLevel, error) {
 	var err error
 
 	// get form values
@@ -330,23 +343,34 @@ func PutDL(r *http.Request) (DayLevel, error) {
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12)`
 	var uid int
 	uid = 6
-	_, err = config.DB.Exec(queryDL, dl.Focus, dl.FischioOrecchie, dl.PowerEnergy, dl.Dormito, dl.PR, dl.Ansia, dl.Arrabiato, dl.Irritato, dl.Depresso, dl.CinqueTib, dl.Meditazione, uid)
+	_, err = config.DB.Exec(queryDL,
+		&dl.Focus,
+		&dl.FischioOrecchie,
+		&dl.PowerEnergy,
+		&dl.Dormito,
+		&dl.PR,
+		&dl.Ansia,
+		&dl.Arrabiato,
+		&dl.Irritato,
+		&dl.Depresso,
+		&dl.CinqueTib,
+		&dl.Meditazione,
+		uid)
 	if err != nil {
-		fmt.Println(dl)
-		return dl, errors.New("500. Internal Server Error." + err.Error())
+		return &dl, errors.New("500. Internal Server Error." + err.Error())
 	}
 	//return the newly created ID
 	fmt.Println("sono le 9 e tutto va bene")
 	lastidrow := config.DB.QueryRow("SELECT max(id) FROM daylevels")
 	err = lastidrow.Scan(&dl.Id)
 	if err != nil {
-		return dl, err
+		return &dl, err
 	}
-	fmt.Println(dl)
-	return dl, nil
+	fmt.Println(&dl)
+	return &dl, nil
 }
 
-func UpdateDL(r *http.Request) (DayLevel, error) {
+func UpdateDL(r *http.Request) (*DayLevel, error) {
 	// get form values
 	var err error
 
@@ -434,10 +458,10 @@ func UpdateDL(r *http.Request) (DayLevel, error) {
 	t := time.Now()
 	fmt.Println(t.Format("2006-01-02 15:04:05"))
 	dl.CreatedOn = t
-	fmt.Println(dl.CreatedOn)
+	fmt.Println("all'interno di UpdateDL")
 
 	updateQuery := `UPDATE daylevels 
-			  SET focus= $1, 
+			  SET focus= $1,
 			  fischio_orecchie=$2,
 			  power_energy=$3,
 			  dormito=$4,
@@ -447,29 +471,28 @@ func UpdateDL(r *http.Request) (DayLevel, error) {
 			  irritato=$8,
 			  depresso=$9,
 			  cinque_tibetani=$10,
-			  meditazione=$11,
-			  createdon=$12			 
-			  WHERE id=$13`
+			  meditazione=$11
+			  WHERE id=$12`
 
 	// insert values
 	_, err = config.DB.Exec(updateQuery,
-		dl.Focus,
-		dl.FischioOrecchie,
-		dl.PowerEnergy,
-		dl.Dormito,
-		dl.PR,
-		dl.Ansia,
-		dl.Arrabiato,
-		dl.Irritato,
-		dl.Depresso,
-		dl.CinqueTib,
-		dl.Meditazione,
-		dl.Id)
+		&dl.Focus,
+		&dl.FischioOrecchie,
+		&dl.PowerEnergy,
+		&dl.Dormito,
+		&dl.PR,
+		&dl.Ansia,
+		&dl.Arrabiato,
+		&dl.Irritato,
+		&dl.Depresso,
+		&dl.CinqueTib,
+		&dl.Meditazione,
+		&dl.Id)
 
 	if err != nil {
-		return dl, err
+		return &dl, err
 	}
-	return dl, nil
+	return &dl, nil
 }
 
 func DeleteDL(r *http.Request) error {

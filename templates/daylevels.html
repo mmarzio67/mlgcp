@@ -27,7 +27,7 @@
   <tbody>
   {{range .}}
     <tr>
-      <th scope="row"><a href="/dls/show?id={{.Id}}">{{.Id}}</a></th>
+      <th scope="row">{{.Id}}</th>
       <td>{{.CreatedOn}}</td>
       <td>{{.Focus}}</td>
       <td>{{.FischioOrecchie}}</td>
@@ -40,8 +40,8 @@
       <td>{{.Depresso}}</td>
       <td>{{.CinqueTib}}</td>
       <td>{{.Meditazione}}</td>
-      <td><a href="dls/update?id={{.Id}}">update</a></td>
-      <td><a href="/dls/delete/process?id={{.Id}}">delete</td>
+      <td><a href="dls/update?id={{.Id}}">Update</a></td>
+      <td><a href="/dls/delete/process?id={{.Id}}">Delete</td>
     </tr>
     {{end}}
   </tbody>

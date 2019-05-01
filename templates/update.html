@@ -4,14 +4,14 @@
 
 <body>
 {{template "navbar"}}
-<h1>Update DayLevel #{{.Id}}</h1>
+<h2>Update DayLevel #{{.Id}}</h2>
 <form method="post" action="/dls/update/process">      
 
     <label for="Id">Id:</label>
     <input type="text" name="Id" value="{{.Id}}" class="field left" readonly="readonly"><br>
 
     <label for="Focus">Focus:</label>
-    <input type="text" name="Focus" placeholder="Focus" required autofocus value="{{.Focus}}"><br>
+    <input type="text" name="focus" placeholder="Focus" required autofocus value="{{.Focus}}"><br>
 
     <label for="fischio_orecchie">Fischio orecchie:</label>
     <input type="text" name="fischio_orecchie" placeholder="Fischio orecchie" required autofocus value="{{.FischioOrecchie}}"><br>
@@ -43,7 +43,7 @@
         <option value="False">Non fatto</option>
     </select><br>
 
-    <label for="meditazione">Mediatazione:</label>
+    <label for="meditazione">Meditazione:</label>
     <select name="meditazione">
         <option value="True">Fatta</option>
         <option value="False">Non fatta</option>

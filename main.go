@@ -4,13 +4,11 @@ import (
 	"net/http"
 
 	"github.com/mmarzio67/ml/daylevels"
-	"github.com/mmarzio67/ml/meditation"
 )
 
 func main() {
 	http.HandleFunc("/", daylevels.Index)
 	http.HandleFunc("/dls", daylevels.Index)
-	http.HandleFunc("/dls/show", daylevels.Show)
 	http.HandleFunc("/dls/create", daylevels.Create)
 	http.HandleFunc("/dls/create/process", daylevels.CreateProcess)
 	http.HandleFunc("/dls/update", daylevels.Update)
@@ -20,9 +18,6 @@ func main() {
 	http.HandleFunc("/login", daylevels.Login)
 	http.HandleFunc("/logout", daylevels.Logout)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
-	http.HandleFunc("/med/show", meditation.Show)
-	http.HandleFunc("/med/create", meditation.Create)
-	http.HandleFunc("/med/create/process", meditation.CreateProcess)
 	http.ListenAndServe(":8080", nil)
 }
 
