@@ -1,12 +1,14 @@
 package main
 
 import (
+	"mmarzio/mlGCP/daylevels"
 	"net/http"
 
-	"github.com/mmarzio67/ml/daylevels"
+	"google.golang.org/appengine"
 )
 
 func main() {
+
 	http.HandleFunc("/", daylevels.Index)
 	http.HandleFunc("/dls", daylevels.Index)
 	http.HandleFunc("/dls/create", daylevels.Create)
@@ -18,7 +20,9 @@ func main() {
 	http.HandleFunc("/login", daylevels.Login)
 	http.HandleFunc("/logout", daylevels.Logout)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
-	http.ListenAndServe(":8080", nil)
+	appengine.Main()
+
+	// http.ListenAndServe(":8080", nil)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {

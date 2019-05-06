@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"mmarzio/mlGCP/config"
 	"net/http"
 	"strconv"
 	"time"
 
-	"github.com/mmarzio67/ml/config"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -160,7 +160,7 @@ func AllDL() (*[]DayLevel, error) {
 					FROM daylevels
 					WHERE uid=$1`
 
-	rows, err := config.DB.Query(queryAllDL, 6)
+	rows, err := config.DB.Query(queryAllDL, 1)
 	if err != nil {
 		return nil, err
 	}
@@ -342,7 +342,7 @@ func PutDL(r *http.Request) (*DayLevel, error) {
 			uid) 
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12)`
 	var uid int
-	uid = 6
+	uid = 1
 	_, err = config.DB.Exec(queryDL,
 		&dl.Focus,
 		&dl.FischioOrecchie,

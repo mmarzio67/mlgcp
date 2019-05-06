@@ -1,0 +1,14 @@
+runtime: go
+env: flex
+threadsafe: true
+env_variables:
+  POSTGRES_CONNECTION: user=mlpsuser password=m!psusER19! dbname=ml
+    host=/cloudsql/medaliving:europe-west3:pgsqldev
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 20
+  cpu_utilization:
+    target_utilization: 0.5
+network: {}
+
+  

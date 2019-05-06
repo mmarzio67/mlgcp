@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"mmarzio/mlGCP/config"
 	"net/http"
 	"strconv"
-
-	"github.com/mmarzio67/ml/config"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
